@@ -1,0 +1,9 @@
+H = Home playing team
+A = Away playing team
+	Y = Yellow Card
+	R = Red Card
+	S = Scorer
+
+e.g. AY = Yellow card for Away playing team
+
+7e klasse voor non-event: 0
