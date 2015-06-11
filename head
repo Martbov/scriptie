@@ -1,0 +1,4 @@
+@RELATION relevance
+@ATTRIBUTE tweet STRING
+@ATTRIBUTE class 	{relevant, irrelevant}
+@DATA
