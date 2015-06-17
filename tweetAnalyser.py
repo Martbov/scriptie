@@ -104,10 +104,9 @@ def mathplot(clusters):
 	y = []
 	for times, tweets in sorted(clusters.items()):
 		oldtime = times
-		minute, second = times.split(':')		
+		minute, second = times.split('.')		
 		second = float(second) / 60 * 100
 		newtime = float(minute) + second / 100
-		#newtime = float('.'.join(minute, second))
 		x.append(newtime)
 		y.append(len(tweets))
 
@@ -119,13 +118,68 @@ def mathplot(clusters):
 
 	plt.show()
 
+def makePlayerDict():
+	playerdict = {
+	'Blind' : 'Daley Blind',
+	'Cillessen' : 'Jasper Cillessen',
+	'Clasie' : 'Jordy Clasie',
+	'Depay' : 'Memphis Depay',
+	'Fer' : 'Leroy Fer',
+	'Guzman' : 'Jonathan de Guzman',
+	'Huntelaar' : 'Klaas Jan Huntelaar',
+	'Janmaat' : 'Daryl Janmaat',
+	'Jong' : 'Nigel de Jong',
+	'Kongolo' : 'Terence Kongolo',
+	'Krul' : 'Tim Krul',
+	'Kuyt' : 'Dirk Kuyt',
+	'Lens' : 'Jeremain Lens',
+	'Indi' : 'Bruno Martins Indi',
+	'Persie' : 'Robin van Persie',
+	'Robben' : 'Arjen Robben',
+	'Sneijder' : 'Wesley Sneijer',
+	'Veltman' : 'Joël Veltman',
+	'Verhaegh' : 'Paul Verhaegh',
+	'Vlaar' : 'Ron Vlaar',
+	'Vorm' : 'Michel Vorm',
+	'Vrij' : 'Stefan de Vrij',
+	'Wijnaldum' : 'Georginio Wijnaldum',
+	'Casillas' : 'Iker Casillas',
+	'Azplicueta' : 'Cesar Azplicueta Tanco',
+	'Piqué' : 'Gerard Piqué',
+	'Alba' : 'Jordi Alba Ramos',
+	'Ramos' : 'Sergio Ramos García',
+	'Iniesta' : 'Andrés Iniesta',
+	'Silva' : 'David Silva',
+	'Fabregas' : 'Francesc Fabregas',
+	'Busquets' : 'Sergio Busquets',
+	'Alonso' : 'Xabier Alonso',
+	'Pedro' : 'Pedro Rodriquez Ledesma',
+	'Xavi' : 'Xavier Hernández Creus',
+	'Costa' : 'Diego Costa',
+	'Torres' : 'Fernando Jose Torres Sanz',
+	'Ryan' : 'Mathew Ryan',
+	'Wilkinson' : 'Alex Wilkinson',
+	'Davidson' : 'Jason Davidson',
+	'Spiranovic' : 'Mattew Spiranovic',
+	'McGowan' : 'Ryan McGowan',
+	'Bresciano' : 'Marc Bresciano',
+	'Dgani' : 'Orel Dgani',
+	'Leckie' : 'Mathew Leckie',
+	'Mckay' : 'Matt Mckay',
+	'Jedinak' : 'Mile Jedinak',
+	'Cahill' : 'Tim Cahill',
+	'Halloran' : 'Ben Halloran',
+	'Oar' : 'Adam Taggart'
+	}
+	return playerdict
+
 def main(argv):
 	annotatedFile = open(argv[1], 'r', encoding='UTF-8')
 	stopWordList = [word[:-1] for word in open('stopwords.txt', 'r')]
 	
 	timeList, allwords = getData(annotatedFile, stopWordList)
 	homeplayers, awayplayers = makePlayerLists(stopWordList)
-
+	playerDict = makePlayerDict()
 	tweetclusters = defaultdict(list)
 
 	for timestamp, tweet in timeList:
@@ -139,26 +193,22 @@ def main(argv):
 			player = checkTweetforPlayer(tweets, homeplayers, awayplayers)
 			event = checkTweetforEvent(tweets)
 			timetweetList.append((times, str(player).title(), str(event)))
-			#print("{} {:<15} {}".format(times, str(player).title(), str(event)))
-	resultfile = open('ausnedresult.txt', 'w')
+	homeGoals = 0
+	awayGoals = 0
 	prevEventPlayer = ''
-	prevMinute = 0
 	for time, player, event in timetweetList:
-		hour, minute = time.split('.')
-		minute = int(minute)
 		if (event, player) != prevEventPlayer:
-			print(time, event, player)
+			if event == 'kaart':
+				print("{}\t{:<10}\t{}".format(time, event, playerDict[player]))
+			else: #if event == 'doelpunt':
+				if player.lower() in homeplayers:
+					homeGoals += 1
+				if player.lower() in awayplayers:
+					awayGoals += 1
+				print("{}\t{}-{:<10}\t{}".format(time, homeGoals, awayGoals, playerDict[player]))
 		prevEventPlayer = (event, player)
-		prevMinute = minute
+
 	
 
 if __name__ == '__main__':
 	main(sys.argv)
-
-
-
-
-
-
-
-
