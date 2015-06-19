@@ -47,8 +47,8 @@ def getData(infile, stopWordList):
 
 def makePlayerLists(stopWordList):
 	""" Creates playerlists for each team from file """
-	homeplayerFile = open('australiaplayers.txt', 'r')
-	awayplayerFile = open('netherlandsplayers.txt', 'r')
+	homeplayerFile = open('../playerlists/australiaplayers.txt', 'r')
+	awayplayerFile = open('../playerlists/netherlandsplayers.txt', 'r')
 	homelistforDict = []
 	awaylistforDict = []
 	homeplayerList = []
@@ -134,7 +134,7 @@ def makeplayerDictbyList(homeplayers, awayplayers):
 
 def main(argv):
 	annotatedFile = open(argv[1], 'r', encoding='UTF-8')
-	stopWordList = [word[:-1] for word in open('stopwords.txt', 'r')]
+	stopWordList = [word[:-1] for word in open('../stopwords.txt', 'r')]
 	
 	timeList, allwords = getData(annotatedFile, stopWordList)
 	homeplayers, awayplayers, homelistforDict, awaylistforDict = makePlayerLists(stopWordList)
